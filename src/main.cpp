@@ -7,10 +7,10 @@
 // my arduino nano have bug so all bitrate should be doubled
 
 unsigned long previousMillis = 0;  // will store last time a CAN Message was send
-const int interval = 500;
+const int interval = 1000;
 
 void onReceive(int packetSize);
-int serial_putc(char c, struct __file*) {
+int serial_putc(char c, struct __file *) {
     Serial.write(c);
     return c;
 }
@@ -47,8 +47,9 @@ void onReceive(int packetSize) {
         // Remote transmission request, packet contains no data
         printf("RTR ");
     }
-    printf(" from 0x%08X, DLC %d, Data ", (int)(CAN.packetId()), CAN.packetDlc());
-    for (int i = 0; i < (int)CAN.packetDlc() && CAN.available(); i++) {
+
+    printf(" from 0x%08lx, DLC %d, Data ", CAN.packetId(), CAN.packetDlc());  // %08lx is important
+    for (int i = 0; i < CAN.packetDlc() && CAN.available(); i++) {
         printf("0x%02X ", CAN.read());
     }
     printf("\n");
@@ -71,35 +72,35 @@ void loop() {
         // CAN.beginPacket(0x1, 8);
         CAN.beginExtendedPacket(0x1, 8);
         CAN.write(heartbeat);
-        CAN.write(0x02);
-        CAN.write(0x03);
-        CAN.write(0x04);
-        CAN.write(0x05);
-        CAN.write(0x06);
-        CAN.write(0x07);
-        CAN.write(0x08);
+        CAN.write(0x01);
+        CAN.write(0x01);
+        CAN.write(0x01);
+        CAN.write(0x01);
+        CAN.write(0x01);
+        CAN.write(0x01);
+        CAN.write(0x01);
         CAN.endPacket();
 
         CAN.beginExtendedPacket(0x3, 8);
         CAN.write(heartbeat);
-        CAN.write(0x02);
         CAN.write(0x03);
-        CAN.write(0x04);
-        CAN.write(0x05);
-        CAN.write(0x06);
-        CAN.write(0x07);
-        CAN.write(0x08);
+        CAN.write(0x03);
+        CAN.write(0x03);
+        CAN.write(0x03);
+        CAN.write(0x03);
+        CAN.write(0x03);
+        CAN.write(0x03);
         CAN.endPacket();
 
         CAN.beginExtendedPacket(0x4, 8);
         CAN.write(heartbeat);
-        CAN.write(0x02);
-        CAN.write(0x03);
         CAN.write(0x04);
-        CAN.write(0x05);
-        CAN.write(0x06);
-        CAN.write(0x07);
-        CAN.write(0x08);
+        CAN.write(0x04);
+        CAN.write(0x04);
+        CAN.write(0x04);
+        CAN.write(0x04);
+        CAN.write(0x04);
+        CAN.write(0x04);
         CAN.endPacket();
 
         // digitalWrite(LED_PIN, !digitalRead(LED_PIN));
