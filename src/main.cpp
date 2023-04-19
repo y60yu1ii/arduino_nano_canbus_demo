@@ -7,7 +7,7 @@
 // my arduino nano have bug so all bitrate should be doubled
 
 unsigned long previousMillis = 0;  // will store last time a CAN Message was send
-const int interval = 1000;
+const int interval = 100;
 
 void onReceive(int packetSize);
 int serial_putc(char c, struct __file *) {
@@ -48,7 +48,7 @@ void onReceive(int packetSize) {
         printf("RTR ");
     }
 
-    printf(" from 0x%08lx, DLC %d, Data ", CAN.packetId(), CAN.packetDlc());  // %08lx is important
+    printf(" from 0x%08lx, DLC %d, Data ", CAN.packetId(), CAN.packetDlc());  // %08lx , never use 08X for long int
     for (int i = 0; i < CAN.packetDlc() && CAN.available(); i++) {
         printf("0x%02X ", CAN.read());
     }
